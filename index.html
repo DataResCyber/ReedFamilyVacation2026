@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Reed Family Vacation 2026</title>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+<style>
+  :root {
+    --green: #2d6a4f;
+    --green-light: #40916c;
+    --green-pale: #d8f3dc;
+    --teal: #1b4332;
+    --gold: #e9c46a;
+    --orange: #f4a261;
+    --red: #e63946;
+    --sky: #48cae4;
+    --bg: #f8faf7;
+    --card-bg: #ffffff;
+    --text: #1a1a2e;
+    --muted: #6c757d;
+    --radius: 14px;
+    --shadow: 0 2px 16px rgba(0,0,0,0.08);
+    --shadow-hover: 0 6px 28px rgba(0,0,0,0.14);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  header {
+    background: linear-gradient(135deg, var(--teal) 0%, var(--green-light) 100%);
+    color: white;
+    padding: 2.5rem 1.5rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  header h1 { font-size: clamp(1.8rem, 5vw, 3rem); font-weight: 800; letter-spacing: -0.5px; }
+  header p { margin-top: 0.4rem; font-size: 1.05rem; opacity: 0.88; }
+  .header-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 20px;
+    padding: 0.2rem 0.9rem;
+    font-size: 0.82rem;
+    margin-bottom: 0.8rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  /* ── Layout ── */
+  main { max-width: 1300px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+
+  /* ── Tab bar ── */
+  .tab-bar-wrap {
+    position: sticky; top: 0; z-index: 50;
+    background: var(--teal);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+  }
+  .tab-bar {
+    display: flex;
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    max-width: 1300px; margin: 0 auto;
+  }
+  .tab-bar::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    flex: 1; min-width: 110px;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 0.2rem;
+    padding: 0.7rem 0.5rem 0.6rem;
+    background: none; border: none;
+    color: rgba(255,255,255,0.65);
+    font-size: 0.78rem; font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+    letter-spacing: 0.2px;
+  }
+  .tab-btn .tab-emoji { font-size: 1.25rem; line-height: 1; }
+  .tab-btn:hover { color: white; background: rgba(255,255,255,0.07); }
+  .tab-btn.active {
+    color: white;
+    border-bottom-color: var(--gold);
+  }
+
+  /* ── Search bar ── */
+  .search-wrap { position: relative; margin-bottom: 1.8rem; }
+  .search-wrap input {
+    width: 100%;
+    padding: 0.7rem 1rem 0.7rem 2.6rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 30px;
+    font-size: 0.95rem;
+    background: white;
+    outline: none;
+    transition: border-color 0.2s;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+  }
+  .search-wrap input:focus { border-color: var(--green-light); }
+  .search-wrap .icon {
+    position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%);
+    font-size: 1rem; opacity: 0.45;
+  }
+
+  /* ── Section headers ── */
+  .section-header {
+    display: flex; align-items: center; gap: 0.6rem;
+    font-size: 1.35rem; font-weight: 700;
+    margin: 2.2rem 0 1rem;
+    color: var(--teal);
+  }
+  .section-header .emoji { font-size: 1.5rem; }
+  .section-count {
+    font-size: 0.78rem; font-weight: 600;
+    background: var(--green-pale);
+    color: var(--green);
+    padding: 0.15rem 0.55rem;
+    border-radius: 20px;
+    margin-left: 0.3rem;
+  }
+
+  /* ── Cards ── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.2rem;
+  }
+  .card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex; flex-direction: column;
+    position: relative;
+  }
+  .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+  .card-image {
+    width: 100%; height: 185px;
+    object-fit: cover;
+    display: block;
+    background: var(--green-pale);
+  }
+  .card-image-placeholder {
+    width: 100%; height: 185px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3.5rem;
+    background: linear-gradient(135deg, var(--green-pale), #b7e4c7);
+  }
+  .card-body { padding: 1rem 1.1rem 1.1rem; flex: 1; display: flex; flex-direction: column; gap: 0.4rem; }
+  .card-category {
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.8px;
+    text-transform: uppercase; color: var(--green-light);
+  }
+  .card-name { font-size: 1.1rem; font-weight: 700; line-height: 1.3; }
+  .card-location {
+    font-size: 0.83rem; color: var(--muted);
+    display: flex; align-items: center; gap: 0.3rem;
+  }
+  .card-desc { font-size: 0.88rem; color: #444; line-height: 1.5; margin-top: 0.15rem; flex: 1; }
+  .card-actions {
+    display: flex; gap: 0.5rem; margin-top: 0.8rem; flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.35rem;
+    padding: 0.42rem 0.9rem;
+    border-radius: 8px;
+    font-size: 0.8rem; font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+  .btn:hover { opacity: 0.85; transform: scale(0.98); }
+  .btn-map { background: var(--sky); color: #003f5c; }
+  .btn-web { background: var(--green-pale); color: var(--teal); }
+  .btn-delete {
+    position: absolute; top: 0.6rem; right: 0.6rem;
+    background: rgba(255,255,255,0.88);
+    border: none; border-radius: 50%;
+    width: 28px; height: 28px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    opacity: 0;
+    transition: opacity 0.2s;
+    color: var(--red);
+  }
+  .card:hover .btn-delete { opacity: 1; }
+
+  /* ── Action buttons (FAB cluster) ── */
+  .fab-cluster {
+    position: fixed; bottom: 2rem; right: 2rem;
+    display: flex; flex-direction: column; align-items: flex-end;
+    gap: 0.75rem; z-index: 100;
+  }
+  .fab-cluster .fab-label {
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .fab-cluster .fab-label span {
+    background: rgba(0,0,0,0.65);
+    color: white; font-size: 0.78rem; font-weight: 600;
+    padding: 0.2rem 0.6rem; border-radius: 20px;
+    white-space: nowrap; pointer-events: none;
+  }
+  .fab {
+    background: var(--green);
+    color: white;
+    border: none; border-radius: 50%;
+    width: 56px; height: 56px;
+    font-size: 1.6rem;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.2s, background 0.2s;
+    flex-shrink: 0;
+  }
+  .fab:hover { background: var(--teal); transform: scale(1.08); }
+  .fab-add:hover { transform: scale(1.08) rotate(90deg); }
+  .fab-import { background: #2563eb; font-size: 1.3rem; width: 48px; height: 48px; }
+
+  /* ── Modal ── */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 200;
+    padding: 1rem;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal {
+    background: white;
+    border-radius: var(--radius);
+    padding: 2rem;
+    width: 100%; max-width: 540px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    transform: translateY(20px);
+    transition: transform 0.2s;
+  }
+  .modal-overlay.open .modal { transform: translateY(0); }
+  .modal h2 { font-size: 1.4rem; margin-bottom: 1.3rem; color: var(--teal); }
+  .form-group { margin-bottom: 1rem; }
+  .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.35rem; color: var(--teal); }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 0.6rem 0.85rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 0.93rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus { border-color: var(--green-light); }
+  .form-group textarea { resize: vertical; min-height: 80px; }
+  .form-row { display: flex; gap: 0.75rem; }
+  .form-row .form-group { flex: 1; }
+  .modal-footer { display: flex; gap: 0.75rem; margin-top: 1.3rem; justify-content: flex-end; }
+  .btn-primary { background: var(--green); color: white; padding: 0.65rem 1.5rem; border-radius: 8px; font-size: 0.95rem; font-weight: 700; border: none; cursor: pointer; }
+  .btn-primary:hover { background: var(--teal); }
+  .btn-cancel { background: #f0f0f0; color: var(--muted); padding: 0.65rem 1.2rem; border-radius: 8px; font-size: 0.95rem; font-weight: 600; border: none; cursor: pointer; }
+  .btn-cancel:hover { background: #e0e0e0; }
+
+  /* ── Empty state ── */
+  .empty { text-align: center; padding: 3rem 1rem; color: var(--muted); }
+  .empty .big { font-size: 3rem; }
+
+  /* ── Toast ── */
+  .toast {
+    position: fixed; bottom: 6rem; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--teal); color: white;
+    padding: 0.7rem 1.5rem; border-radius: 30px;
+    font-size: 0.9rem; font-weight: 600;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    opacity: 0; transition: all 0.3s; z-index: 300;
+    pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ── Mobile ── */
+  @media (max-width: 640px) {
+    header { padding: 1.8rem 1rem 1.4rem; }
+    header h1 { font-size: 1.7rem; }
+    header p { font-size: 0.9rem; }
+    .header-badge { font-size: 0.72rem; padding: 0.18rem 0.7rem; }
+
+    main { padding: 1rem 0.75rem 6rem; }
+
+    .search-wrap { margin-bottom: 1.2rem; }
+    .search-wrap input { font-size: 1rem; padding: 0.75rem 1rem 0.75rem 2.6rem; }
+
+    /* Tab bar tightens on mobile */
+    .tab-btn { min-width: 80px; padding: 0.6rem 0.4rem 0.5rem; font-size: 0.72rem; }
+    .tab-btn .tab-emoji { font-size: 1.1rem; }
+
+    .section-header { font-size: 1.1rem; margin: 1.6rem 0 0.75rem; }
+
+    /* Single column cards on mobile */
+    .cards-grid { grid-template-columns: 1fr; gap: 1rem; }
+
+    /* Taller image on phone so card doesn't feel squat */
+    .card-image, .card-image-placeholder { height: 200px; }
+
+    /* Always show delete button on touch (no hover) */
+    .btn-delete { opacity: 1; width: 32px; height: 32px; font-size: 0.9rem; }
+
+    /* Bigger tap targets for buttons */
+    .btn { padding: 0.55rem 1rem; font-size: 0.85rem; }
+
+    /* FAB cluster — safe area aware */
+    .fab-cluster {
+      bottom: calc(1.2rem + env(safe-area-inset-bottom));
+      right: 1.2rem;
+    }
+    .fab-cluster .fab-label span { display: none; }
+
+    /* Modal slides up from bottom on mobile */
+    .modal-overlay { align-items: flex-end; padding: 0; }
+    .modal {
+      border-radius: var(--radius) var(--radius) 0 0;
+      max-width: 100%; max-height: 92vh;
+      padding: 1.5rem 1.2rem calc(1.5rem + env(safe-area-inset-bottom));
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+    .modal-overlay .modal { transform: translateY(100%); }
+
+    .form-row { flex-direction: column; gap: 0; }
+    .form-group input, .form-group select, .form-group textarea {
+      font-size: 1rem; /* prevents iOS zoom on focus */
+      padding: 0.75rem 0.85rem;
+    }
+    .modal-footer { flex-direction: column-reverse; }
+    .btn-primary, .btn-cancel { width: 100%; text-align: center; justify-content: center; padding: 0.85rem; }
+
+    .toast { width: 90%; text-align: center; }
+  }
+
+  /* ── Tablet ── */
+  @media (min-width: 641px) and (max-width: 900px) {
+    .cards-grid { grid-template-columns: repeat(2, 1fr); }
+    .controls { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">Au Sable, NY · Adirondacks · Summer 2026</div>
+  <h1>🏕️ Reed Family Vacation 2026</h1>
+  <p>Things to do within one hour · curated &amp; family-added</p>
+</header>
+
+<div class="tab-bar-wrap">
+  <div class="tab-bar" id="tabBar"></div>
+</div>
+
+<main>
+  <div class="search-wrap">
+    <span class="icon">🔍</span>
+    <input id="searchInput" type="text" placeholder="Search activities, places…" oninput="render()" />
+  </div>
+  <div id="content"></div>
+</main>
+
+<div class="fab-cluster">
+  <div class="fab-label">
+    <span>Import Excel</span>
+    <button class="fab fab-import" title="Import from Excel" onclick="openImport()">📥</button>
+  </div>
+  <div class="fab-label">
+    <span>Add a place</span>
+    <button class="fab fab-add" title="Add a place" onclick="openModal()">＋</button>
+  </div>
+</div>
+
+<!-- Add Place Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
+  <div class="modal">
+    <h2>➕ Add a Place</h2>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Category *</label>
+        <select id="fCategory">
+          <option value="">— select —</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Name *</label>
+        <input id="fName" type="text" placeholder="e.g. Ausable Chasm" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Location / Address *</label>
+      <input id="fLocation" type="text" placeholder="e.g. 2144 US-9, Ausable Chasm, NY" />
+    </div>
+    <div class="form-group">
+      <label>Description</label>
+      <textarea id="fDesc" placeholder="Briefly describe what makes this special…"></textarea>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Website URL</label>
+        <input id="fWebsite" type="url" placeholder="https://…" />
+      </div>
+      <div class="form-group">
+        <label>Image URL</label>
+        <input id="fImage" type="url" placeholder="https://…/photo.jpg" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-primary" onclick="addEntry()">Add Place</button>
+    </div>
+  </div>
+</div>
+
+<!-- Password Modal -->
+<div class="modal-overlay" id="pwOverlay" onclick="handlePwOverlayClick(event)">
+  <div class="modal" style="max-width:360px">
+    <h2>🔒 Enter Password</h2>
+    <p style="font-size:0.88rem;color:var(--muted);margin-bottom:1.2rem">Required to import or replace data.</p>
+    <div class="form-group">
+      <label>Password</label>
+      <input id="pwInput" type="password" placeholder="Password" onkeydown="if(event.key==='Enter')checkPassword()" />
+    </div>
+    <div id="pwError" style="color:var(--red);font-size:0.83rem;margin-top:-0.4rem;display:none">Incorrect password.</div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closePwModal()">Cancel</button>
+      <button class="btn-primary" onclick="checkPassword()">Unlock</button>
+    </div>
+  </div>
+</div>
+
+<!-- Import Modal -->
+<div class="modal-overlay" id="importOverlay" onclick="handleImportOverlayClick(event)">
+  <div class="modal" style="max-width:480px">
+    <h2>📥 Import from Excel</h2>
+    <p style="font-size:0.88rem;color:var(--muted);margin-bottom:1rem">
+      Upload an <strong>.xlsx</strong> file. Required columns: <code>name</code>, <code>category</code>, <code>location</code>.<br>
+      Optional: <code>desc</code>, <code>website</code>, <code>image</code>.
+    </p>
+    <div class="form-group">
+      <label>Import mode</label>
+      <select id="importMode">
+        <option value="replace">Replace all existing entries</option>
+        <option value="merge">Merge (add to existing)</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Choose Excel file (.xlsx)</label>
+      <input id="importFile" type="file" accept=".xlsx,.xls" style="padding:0.5rem 0" />
+    </div>
+    <div id="importPreview" style="font-size:0.85rem;color:var(--muted);min-height:1.4rem"></div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeImportModal()">Cancel</button>
+      <button class="btn-primary" onclick="doImport()">Import</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── Data ──────────────────────────────────────────────────────────────────────
+
+// Tabs shown to the user
+const TABS = [
+  { id: 'hikes',       label: 'Hikes',          emoji: '🥾', cats: ['hikes', 'waterfalls'] },
+  { id: 'restaurants', label: 'Restaurants',     emoji: '🍽️', cats: ['restaurants'] },
+  { id: 'activities',  label: 'Activities',      emoji: '🧗', cats: ['adventures', 'swimming'] },
+  { id: 'ice-cream',   label: 'Ice Cream',       emoji: '🍦', cats: ['ice-cream'] },
+  { id: 'kids',        label: 'Kids Activities', emoji: '🐑', cats: ['petting-zoo', 'farms'] },
+  { id: 'other',       label: 'Other',           emoji: '🛍️', cats: ['main-street'] },
+];
+
+// Underlying categories (used for card labels and the Add form)
+const CATEGORIES = [
+  { id: 'hikes',       label: 'Hikes',                      emoji: '🥾' },
+  { id: 'waterfalls',  label: 'Waterfalls & Swimming Holes', emoji: '💧' },
+  { id: 'adventures',  label: 'Adventures',                  emoji: '🧗' },
+  { id: 'swimming',    label: 'Swimming',                    emoji: '🏊' },
+  { id: 'restaurants', label: 'Restaurants',                 emoji: '🍽️' },
+  { id: 'ice-cream',   label: 'Ice Cream',                   emoji: '🍦' },
+  { id: 'petting-zoo', label: 'Petting Zoos',                emoji: '🐑' },
+  { id: 'farms',       label: 'Farms',                       emoji: '🌾' },
+  { id: 'main-street', label: 'Main Street',                 emoji: '🛍️' },
+];
+
+function catToTab(catId) {
+  return TABS.find(t => t.cats.includes(catId))?.id || 'other';
+}
+
+const SEED_DATA = [
+  // ── Hikes ──
+  {
+    id: 1, category: 'hikes',
+    name: 'Giant Mountain Trail',
+    location: 'Route 9N, Keene, NY 12942',
+    desc: 'One of the Adirondack High Peaks. A challenging 9-mile round trip with sweeping summit views of Lake Champlain and Vermont.',
+    website: 'https://www.dec.ny.gov/lands/22455.html',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Giant_Mountain_in_the_Adirondacks.jpg/1280px-Giant_Mountain_in_the_Adirondacks.jpg',
+  },
+  {
+    id: 2, category: 'hikes',
+    name: 'Poke-O-Moonshine Mountain',
+    location: 'Route 9, Chesterfield, NY 12817',
+    desc: 'A moderate 2.6-mile round trip hike with a historic fire tower at the summit offering panoramic Adirondack views. Great for families.',
+    website: 'https://www.dec.ny.gov/lands/9066.html',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Pokemoonshine_Summit.jpg/1280px-Pokemoonshine_Summit.jpg',
+  },
+  {
+    id: 3, category: 'hikes',
+    name: 'Hurricane Mountain',
+    location: 'Gulf Rd, Keene, NY 12942',
+    desc: 'A rewarding 7-mile round-trip with an old fire tower. Spectacular views toward Lake Champlain and the High Peaks.',
+    website: 'https://www.alltrails.com/trail/us/new-york/hurricane-mountain',
+    image: '',
+  },
+  {
+    id: 4, category: 'hikes',
+    name: 'Cobble Hill Trail',
+    location: 'Lake Placid, NY 12946',
+    desc: 'A short, easy 1-mile loop through mixed hardwood forest with gentle terrain — perfect for families and beginners.',
+    website: 'https://www.alltrails.com/trail/us/new-york/cobble-hill-trail',
+    image: '',
+  },
+
+  // ── Waterfalls & Swimming Holes ──
+  {
+    id: 5, category: 'waterfalls',
+    name: 'Ausable Chasm',
+    location: '2144 US-9, Ausable Chasm, NY 12911',
+    desc: 'The "Grand Canyon of the Adirondacks." Walk the rim, raft the river, and swim in natural sandstone pools carved over 500 million years.',
+    website: 'https://www.ausablechasm.com',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Ausable_Chasm_9.jpg/1280px-Ausable_Chasm_9.jpg',
+  },
+  {
+    id: 6, category: 'waterfalls',
+    name: 'High Falls Gorge',
+    location: '4761 NY-86, Wilmington, NY 12997',
+    desc: 'Four dramatic waterfalls on the West Branch of the Ausable River, accessible via easy boardwalks and bridges. Stunning year-round.',
+    website: 'https://highfallsgorge.com',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/High_Falls_Gorge.jpg/1280px-High_Falls_Gorge.jpg',
+  },
+  {
+    id: 7, category: 'waterfalls',
+    name: 'Beaver Meadow Falls',
+    location: 'Johns Brook Trail, Keene Valley, NY 12943',
+    desc: 'A stunning 50-foot waterfall reached via a 2.5-mile hike through beautiful forest. Popular swimming hole below the falls.',
+    website: 'https://www.alltrails.com/trail/us/new-york/beaver-meadow-falls',
+    image: '',
+  },
+  {
+    id: 8, category: 'waterfalls',
+    name: 'Split Rock Falls',
+    location: 'NY-9N, Elizabethtown, NY 12932',
+    desc: 'A hidden gem — multiple cascades and natural pools perfect for swimming, with easy roadside access. Bring water shoes.',
+    website: 'https://www.alltrails.com/trail/us/new-york/split-rock-falls',
+    image: '',
+  },
+  {
+    id: 9, category: 'waterfalls',
+    name: 'OK Slip Falls',
+    location: 'Indian Lake, NY 12842',
+    desc: 'One of New York\'s highest free-falling waterfalls at 200 feet. A 5-mile round-trip hike through the Hudson Gorge Wilderness.',
+    website: 'https://www.alltrails.com/trail/us/new-york/ok-slip-falls',
+    image: '',
+  },
+
+  // ── Petting Zoos ──
+  {
+    id: 10, category: 'petting-zoo',
+    name: 'Adirondack Animal Land',
+    location: '4628 US-11, Malone, NY 12953',
+    desc: 'Drive-through and walk-through wildlife park with over 100 species. Kids can feed deer, goats, and more up close.',
+    website: 'https://www.adirondackanimalland.com',
+    image: '',
+  },
+  {
+    id: 11, category: 'petting-zoo',
+    name: 'Tillman\'s Village Inn Farm',
+    location: '2199 NY-86, Jay, NY 12941',
+    desc: 'A charming working farm with friendly goats, chickens, and sheep. The kids love the feeding times. Call ahead for hours.',
+    website: '',
+    image: '',
+  },
+  {
+    id: 12, category: 'petting-zoo',
+    name: 'North Star Farm',
+    location: 'Chazy, NY 12921',
+    desc: 'Small family farm open seasonally with alpacas, goats, and poultry. Offers alpaca fiber products in their on-site shop.',
+    website: '',
+    image: '',
+  },
+
+  // ── Restaurants ──
+  {
+    id: 13, category: 'restaurants',
+    name: 'The Ausable Inn Restaurant',
+    location: '2144 US-9, Ausable Chasm, NY 12911',
+    desc: 'Classic Adirondack dining right at the chasm entrance. Hearty pub food, local beers on tap, and a welcoming post-hike atmosphere.',
+    website: 'https://www.ausablechasm.com',
+    image: '',
+  },
+  {
+    id: 14, category: 'restaurants',
+    name: 'Noon Mark Diner',
+    location: '2756 NY-73, Keene Valley, NY 12943',
+    desc: 'A legendary Adirondack institution since 1946. Famous homemade pies, big breakfasts, and diner classics with views of the High Peaks.',
+    website: 'https://www.noonmarkdiner.com',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Noon_Mark_Diner_Keene_Valley_NY.jpg/1280px-Noon_Mark_Diner_Keene_Valley_NY.jpg',
+  },
+  {
+    id: 15, category: 'restaurants',
+    name: 'The Downhill Grill',
+    location: '2516 Main St, Lake Placid, NY 12946',
+    desc: 'Lively après-ski spot with burgers, wings, craft beers, and great Lake Placid people-watching from the patio.',
+    website: 'https://thedownhillgrill.com',
+    image: '',
+  },
+  {
+    id: 16, category: 'restaurants',
+    name: 'Plattsburgh Brewing Company',
+    location: '38 Court St, Plattsburgh, NY 12901',
+    desc: 'Craft brewery and restaurant with rotating taps, wood-fired pizzas, and a lively taproom. A great spot after a day on the water.',
+    website: 'https://plattsburghbrewing.com',
+    image: '',
+  },
+  {
+    id: 17, category: 'restaurants',
+    name: 'Café Morso',
+    location: '50 Bridge St, Plattsburgh, NY 12901',
+    desc: 'Locally loved café serving creative sandwiches, fresh salads, and excellent espresso. Perfect for a quick, quality lunch.',
+    website: '',
+    image: '',
+  },
+
+  // ── Main Street ──
+  {
+    id: 18, category: 'main-street',
+    name: 'Lake Placid Main Street',
+    location: 'Main St, Lake Placid, NY 12946',
+    desc: 'Olympic village charm — browse boutiques, galleries, and outfitters along Mirror Lake. Home to the Olympic Museum and endless photo ops.',
+    website: 'https://www.lakeplacid.com',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Lake_Placid%2C_New_York%2C_Main_Street.jpg/1280px-Lake_Placid%2C_New_York%2C_Main_Street.jpg',
+  },
+  {
+    id: 19, category: 'main-street',
+    name: 'Keene Valley Village',
+    location: 'Main St, Keene Valley, NY 12943',
+    desc: 'A tiny, perfect Adirondack hamlet with an art gallery, outfitter, library, and diner. The gateway to the High Peaks.',
+    website: '',
+    image: '',
+  },
+  {
+    id: 20, category: 'main-street',
+    name: 'Plattsburgh City Beach & Downtown',
+    location: 'City Beach, Plattsburgh, NY 12901',
+    desc: 'Walkable downtown with local shops, restaurants, and the beautiful Lake Champlain waterfront. Farmers market on Saturdays.',
+    website: 'https://www.cityofplattsburgh.com',
+    image: '',
+  },
+  {
+    id: 21, category: 'main-street',
+    name: 'Elizabethtown Village',
+    location: 'Court St, Elizabethtown, NY 12932',
+    desc: 'The Essex County seat — quiet and charming with a historic courthouse, galleries, and the Adirondack Center Museum.',
+    website: '',
+    image: '',
+  },
+
+  // ── Ice Cream ──
+  {
+    id: 22, category: 'ice-cream',
+    name: 'Lake Placid Creamery',
+    location: '2513 Main St, Lake Placid, NY 12946',
+    desc: 'Hand-dipped scoops of housemade ice cream with inventive local flavors. The maple walnut and black raspberry are legendary.',
+    website: '',
+    image: '',
+  },
+  {
+    id: 23, category: 'ice-cream',
+    name: 'Stewarts Shops',
+    location: 'Multiple locations in the region',
+    desc: 'The beloved upstate NY chain — their own-brand ice cream is surprisingly excellent. Open late and always a hit with kids.',
+    website: 'https://www.stewartshops.com',
+    image: '',
+  },
+  {
+    id: 24, category: 'ice-cream',
+    name: 'The Big Scoop',
+    location: '2144 US-9, Ausable Chasm, NY 12911',
+    desc: 'Classic roadside soft-serve and hard scoop right near the chasm entrance. Perfect post-adventure treat.',
+    website: '',
+    image: '',
+  },
+  {
+    id: 25, category: 'ice-cream',
+    name: 'Donnelly\'s Soft Serve',
+    location: 'Wilmington, NY 12997',
+    desc: 'Old-school soft-serve stand on the road to Whiteface Mountain. Seasonal spot with a devoted following and long summer lines.',
+    website: '',
+    image: '',
+  },
+
+  // ── Adventures ──
+  {
+    id: 26, category: 'adventures',
+    name: 'Ausable Chasm – Rafting & Zip Line',
+    location: '2144 US-9, Ausable Chasm, NY 12911',
+    desc: 'Raft the Ausable River through the dramatic gorge, then soar on the zip line over the chasm. The ultimate Adirondack adventure.',
+    website: 'https://www.ausablechasm.com',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Ausable_Chasm_9.jpg/1280px-Ausable_Chasm_9.jpg',
+  },
+  {
+    id: 27, category: 'adventures',
+    name: 'Adirondack Extreme Adventure Course',
+    location: '35 Cobblestone Way, Bolton Landing, NY 12814',
+    desc: 'Treetop obstacle courses and zip lines through the forest canopy. Five levels of difficulty from beginner to extreme.',
+    website: 'https://www.adirondackextreme.com',
+    image: '',
+  },
+  {
+    id: 28, category: 'adventures',
+    name: 'Vermont Canoe Touring Center',
+    location: '451 Portage Rd, Swanton, VT 05488',
+    desc: 'Kayak and canoe rentals just across the border on Lake Champlain. Day trips and guided tours through the Missisquoi Delta.',
+    website: '',
+    image: '',
+  },
+  {
+    id: 29, category: 'adventures',
+    name: 'Whiteface Mountain Bike Park',
+    location: '5021 NY-86, Wilmington, NY 12997',
+    desc: 'Downhill mountain biking on Whiteface with gondola access. Trails for all levels plus the thrilling Wilmington Flume descent.',
+    website: 'https://www.whiteface.com',
+    image: '',
+  },
+  {
+    id: 30, category: 'adventures',
+    name: 'Lake Champlain Kayak Tours',
+    location: 'Plattsburgh Beach, Plattsburgh, NY 12901',
+    desc: 'Guided kayak tours of Lake Champlain, including sunset paddling and island excursions. Rentals also available.',
+    website: '',
+    image: '',
+  },
+  {
+    id: 31, category: 'adventures',
+    name: 'Barkeater Trails (Mountain Biking)',
+    location: 'Jay, NY 12941',
+    desc: 'Award-winning cross-country mountain bike trail network with 50+ miles of beautifully maintained singletrack.',
+    website: 'https://www.barkeatertracks.org',
+    image: '',
+  },
+
+  // ── Swimming ──
+  {
+    id: 32, category: 'swimming',
+    name: 'Lake Placid Beach (Mirror Lake)',
+    location: 'Mirror Lake Dr, Lake Placid, NY 12946',
+    desc: 'Crystal-clear Mirror Lake with a sandy public beach, lifeguards in summer, and stunning mountain backdrop. Free admission.',
+    website: 'https://www.lakeplacid.com',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Mirror_Lake%2C_Lake_Placid%2C_NY.jpg/1280px-Mirror_Lake%2C_Lake_Placid%2C_NY.jpg',
+  },
+  {
+    id: 33, category: 'swimming',
+    name: 'Plattsburgh City Beach',
+    location: 'Lake Shore Rd, Plattsburgh, NY 12901',
+    desc: 'A large, well-maintained Lake Champlain beach with lifeguards, facilities, and views across to Vermont\'s Green Mountains.',
+    website: 'https://www.cityofplattsburgh.com',
+    image: '',
+  },
+  {
+    id: 34, category: 'swimming',
+    name: 'Ausable Point State Campground Beach',
+    location: 'Ausable Point, Peru, NY 12972',
+    desc: 'Beautiful sandy Lake Champlain beach with gentle waves, picnic areas, and campground. Day-use passes available.',
+    website: 'https://parks.ny.gov/parks/ausablepoint',
+    image: '',
+  },
+  {
+    id: 35, category: 'swimming',
+    name: 'Heart Lake (Adirondack Loj)',
+    location: '1002 Adirondack Loj Rd, Lake Placid, NY 12946',
+    desc: 'Remote mountain lake swimming with a small beach and canoe rentals at the Adirondack Mountain Club\'s Loj. Pristine and cold.',
+    website: 'https://www.adk.org',
+    image: '',
+  },
+  {
+    id: 36, category: 'swimming',
+    name: 'Chapel Pond',
+    location: 'NY-73, Keene Valley, NY 12943',
+    desc: 'A dramatic pond at the base of Giant\'s cliffs. Roadside access, cold clear water, and one of the most scenic swimming spots in the Adirondacks.',
+    website: '',
+    image: '',
+  },
+
+  // ── Farms ──
+  {
+    id: 37, category: 'farms',
+    name: 'Rulfs Orchard',
+    location: '531 Bear Swamp Rd, Peru, NY 12972',
+    desc: 'Family-run orchard since 1946. Pick-your-own apples, peaches, and pumpkins in season. Legendary homemade cider donuts and pies.',
+    website: 'https://www.rulfsorchard.com',
+    image: '',
+  },
+  {
+    id: 38, category: 'farms',
+    name: 'Asgaard Farm & Dairy',
+    location: '55 Blue Ridge Rd, Au Sable Forks, NY 12912',
+    desc: 'A historic Adirondack dairy farm producing artisan goat cheese. Farm tours, a small shop, and gorgeous mountain views.',
+    website: 'https://www.asgaardfarm.com',
+    image: '',
+  },
+  {
+    id: 39, category: 'farms',
+    name: 'Mace Chasm Farm',
+    location: '10823 NY-22, Keeseville, NY 12944',
+    desc: 'Pick-your-own strawberries, blueberries, and vegetables at this working farm stand. A wonderful stop for fresh local produce.',
+    website: '',
+    image: '',
+  },
+  {
+    id: 40, category: 'farms',
+    name: 'Juniper Hill Farm',
+    location: 'Wadhams, NY 12993',
+    desc: 'A small diversified farm with a seasonal CSA and farm stand. Known for heritage-breed pork and pasture-raised eggs.',
+    website: '',
+    image: '',
+  },
+  {
+    id: 41, category: 'farms',
+    name: 'Champlain Valley Creamery',
+    location: 'Vergennes, VT 05491',
+    desc: 'Just across the lake — exceptional small-batch organic cheeses. Their cream cheese and triple cream brie are award winners.',
+    website: 'https://champlainvalleycreamery.com',
+    image: '',
+  },
+];
+
+// ── State ────────────────────────────────────────────────────────────────────
+
+let entries = JSON.parse(localStorage.getItem('ausable_entries') || 'null') || SEED_DATA;
+let nextId = Math.max(...entries.map(e => e.id)) + 1;
+let activeTab = 'hikes';
+
+function save() {
+  localStorage.setItem('ausable_entries', JSON.stringify(entries));
+}
+
+// ── Render ───────────────────────────────────────────────────────────────────
+
+function mapsUrl(location) {
+  return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(location);
+}
+
+function catInfo(id) {
+  return CATEGORIES.find(c => c.id === id) || { label: id, emoji: '📍' };
+}
+
+function render() {
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  const tab = TABS.find(t => t.id === activeTab) || TABS[0];
+
+  // Build tab bar
+  const tabBar = document.getElementById('tabBar');
+  tabBar.innerHTML = TABS.map(t => `
+    <button class="tab-btn ${t.id === activeTab ? 'active' : ''}" onclick="setTab('${t.id}')">
+      <span class="tab-emoji">${t.emoji}</span>
+      <span>${t.label}</span>
+    </button>`).join('');
+
+  // Filter entries to current tab + search
+  let filtered = entries.filter(e => {
+    if (!tab.cats.includes(e.category)) return false;
+    if (q) {
+      const hay = [e.name, e.location, e.desc, catInfo(e.category).label].join(' ').toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+
+  const content = document.getElementById('content');
+
+  if (filtered.length === 0) {
+    content.innerHTML = `<div class="empty"><div class="big">${tab.emoji}</div><p>Nothing here yet. <strong>Add a place!</strong></p></div>`;
+    return;
+  }
+
+  // Group by underlying category, preserving tab.cats order
+  const grouped = {};
+  tab.cats.forEach(c => { grouped[c] = []; });
+  filtered.forEach(e => { if (grouped[e.category]) grouped[e.category].push(e); });
+
+  let html = '';
+  tab.cats.forEach(catId => {
+    const items = grouped[catId];
+    if (!items || items.length === 0) return;
+    const cat = catInfo(catId);
+
+    // Only show sub-header when tab covers multiple categories
+    if (tab.cats.length > 1) {
+      html += `<div class="section-header">
+        <span class="emoji">${cat.emoji}</span>
+        <span>${cat.label}</span>
+        <span class="section-count">${items.length}</span>
+      </div>`;
+    }
+
+    html += `<div class="cards-grid">`;
+    items.forEach(item => {
+      const mapUrl = mapsUrl(item.location);
+      const imgHtml = item.image
+        ? `<a href="${mapUrl}" target="_blank" rel="noopener"><img class="card-image" src="${item.image}" alt="${item.name}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /></a><div class="card-image-placeholder" style="display:none">${cat.emoji}</div>`
+        : `<a href="${mapUrl}" target="_blank" rel="noopener"><div class="card-image-placeholder">${cat.emoji}</div></a>`;
+
+      html += `<div class="card" id="card-${item.id}">
+        ${imgHtml}
+        <button class="btn-delete" onclick="deleteEntry(${item.id})" title="Remove">✕</button>
+        <div class="card-body">
+          <div class="card-category">${cat.emoji} ${cat.label}</div>
+          <div class="card-name">${item.name}</div>
+          <div class="card-location">📍 ${item.location}</div>
+          ${item.desc ? `<div class="card-desc">${item.desc}</div>` : ''}
+          <div class="card-actions">
+            <a class="btn btn-map" href="${mapUrl}" target="_blank" rel="noopener">🗺️ Map</a>
+            ${item.website ? `<a class="btn btn-web" href="${item.website}" target="_blank" rel="noopener">🌐 Website</a>` : ''}
+          </div>
+        </div>
+      </div>`;
+    });
+    html += `</div>`;
+  });
+
+  content.innerHTML = html;
+}
+
+function setTab(id) {
+  activeTab = id;
+  document.getElementById('searchInput').value = '';
+  render();
+}
+
+// ── Modal ────────────────────────────────────────────────────────────────────
+
+function openModal() {
+  // Populate category select
+  const sel = document.getElementById('fCategory');
+  sel.innerHTML = '<option value="">— select —</option>';
+  CATEGORIES.forEach(c => {
+    sel.innerHTML += `<option value="${c.id}">${c.emoji} ${c.label}</option>`;
+  });
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  ['fCategory','fName','fLocation','fDesc','fWebsite','fImage'].forEach(id => {
+    const el = document.getElementById(id);
+    el.value = '';
+  });
+}
+
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+}
+
+function addEntry() {
+  const category = document.getElementById('fCategory').value.trim();
+  const name     = document.getElementById('fName').value.trim();
+  const location = document.getElementById('fLocation').value.trim();
+  const desc     = document.getElementById('fDesc').value.trim();
+  const website  = document.getElementById('fWebsite').value.trim();
+  const image    = document.getElementById('fImage').value.trim();
+
+  if (!category || !name || !location) {
+    showToast('⚠️ Please fill in category, name, and location.');
+    return;
+  }
+
+  const entry = { id: nextId++, category, name, location, desc, website, image };
+  entries.push(entry);
+  save();
+  closeModal();
+  activeTab = catToTab(category);
+  render();
+  showToast('✅ Added "' + name + '"!');
+}
+
+function deleteEntry(id) {
+  const entry = entries.find(e => e.id === id);
+  if (!entry) return;
+  if (!confirm(`Remove "${entry.name}"?`)) return;
+  entries = entries.filter(e => e.id !== id);
+  save();
+  render();
+  showToast('🗑️ Removed.');
+}
+
+// ── Toast ────────────────────────────────────────────────────────────────────
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ── Password & Import ────────────────────────────────────────────────────────
+
+const PW = 'Shawnee01!';
+const PW_KEY = 'reed_unlocked';
+
+function isUnlocked() {
+  return localStorage.getItem(PW_KEY) === '1';
+}
+
+function openImport() {
+  if (isUnlocked()) {
+    showImportModal();
+  } else {
+    document.getElementById('pwInput').value = '';
+    document.getElementById('pwError').style.display = 'none';
+    document.getElementById('pwOverlay').classList.add('open');
+    setTimeout(() => document.getElementById('pwInput').focus(), 120);
+  }
+}
+
+function checkPassword() {
+  const val = document.getElementById('pwInput').value;
+  if (val === PW) {
+    localStorage.setItem(PW_KEY, '1');
+    closePwModal();
+    showImportModal();
+  } else {
+    const err = document.getElementById('pwError');
+    err.style.display = 'block';
+    document.getElementById('pwInput').value = '';
+    document.getElementById('pwInput').focus();
+  }
+}
+
+function closePwModal() {
+  document.getElementById('pwOverlay').classList.remove('open');
+}
+
+function handlePwOverlayClick(e) {
+  if (e.target === document.getElementById('pwOverlay')) closePwModal();
+}
+
+function showImportModal() {
+  document.getElementById('importFile').value = '';
+  document.getElementById('importPreview').textContent = '';
+  document.getElementById('importOverlay').classList.add('open');
+  // Live preview row count as file is chosen
+  document.getElementById('importFile').onchange = previewImport;
+}
+
+function closeImportModal() {
+  document.getElementById('importOverlay').classList.remove('open');
+}
+
+function handleImportOverlayClick(e) {
+  if (e.target === document.getElementById('importOverlay')) closeImportModal();
+}
+
+const VALID_CATS = new Set(CATEGORIES.map(c => c.id));
+
+function parseSheet(file, callback) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const wb = XLSX.read(e.target.result, { type: 'array' });
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(ws, { defval: '' });
+    callback(rows);
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function rowsToEntries(rows, startId) {
+  const valid = [], errors = [];
+  rows.forEach((row, i) => {
+    const name     = String(row.name     || '').trim();
+    const category = String(row.category || '').trim().toLowerCase();
+    const location = String(row.location || '').trim();
+    if (!name || !category || !location) {
+      errors.push(`Row ${i + 2}: missing name, category, or location`);
+      return;
+    }
+    if (!VALID_CATS.has(category)) {
+      errors.push(`Row ${i + 2}: unknown category "${category}"`);
+      return;
+    }
+    valid.push({
+      id: startId++,
+      category,
+      name,
+      location,
+      desc:    String(row.desc    || '').trim(),
+      website: String(row.website || '').trim(),
+      image:   String(row.image   || '').trim(),
+    });
+  });
+  return { valid, errors };
+}
+
+function previewImport() {
+  const file = document.getElementById('importFile').files[0];
+  const preview = document.getElementById('importPreview');
+  if (!file) { preview.textContent = ''; return; }
+  parseSheet(file, rows => {
+    const { valid, errors } = rowsToEntries(rows, 1);
+    let msg = `✅ ${valid.length} valid row${valid.length !== 1 ? 's' : ''} found.`;
+    if (errors.length) msg += ` ⚠️ ${errors.length} row${errors.length !== 1 ? 's' : ''} will be skipped.`;
+    preview.textContent = msg;
+  });
+}
+
+function doImport() {
+  const file = document.getElementById('importFile').files[0];
+  if (!file) { showToast('⚠️ Please choose an Excel file.'); return; }
+  const mode = document.getElementById('importMode').value;
+  parseSheet(file, rows => {
+    const base = mode === 'replace' ? 1 : nextId;
+    const { valid, errors } = rowsToEntries(rows, base);
+    if (valid.length === 0) {
+      showToast('⚠️ No valid rows found. Check your column names.');
+      return;
+    }
+    if (mode === 'replace') {
+      entries = valid;
+    } else {
+      entries = [...entries, ...valid];
+    }
+    nextId = Math.max(...entries.map(e => e.id)) + 1;
+    save();
+    closeImportModal();
+    activeTab = 'hikes';
+    render();
+    const skipped = errors.length ? ` (${errors.length} skipped)` : '';
+    showToast(`✅ Imported ${valid.length} places${skipped}!`);
+  });
+}
+
+// ── Init ─────────────────────────────────────────────────────────────────────
+
+render();
+</script>
+</body>
+</html>
