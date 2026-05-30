@@ -933,8 +933,13 @@ function render() {
     html += `<div class="cards-grid">`;
     items.forEach(item => {
       const mapUrl = mapsUrl(item.location);
-      const imgHtml = item.image
-        ? `<a href="${mapUrl}" target="_blank" rel="noopener"><img class="card-image" src="${item.image}" alt="${item.name}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /></a><div class="card-image-placeholder" style="display:none">${cat.emoji}</div>`
+      const imgSrc = item.image
+        ? item.image
+        : item.website
+          ? `https://image.thum.io/get/width/600/crop/350/noanimate/${item.website}`
+          : null;
+      const imgHtml = imgSrc
+        ? `<a href="${mapUrl}" target="_blank" rel="noopener"><img class="card-image" src="${imgSrc}" alt="${item.name}" loading="lazy" onerror="this.parentElement.outerHTML='<a href=\\'${mapUrl}\\' target=\\'_blank\\' rel=\\'noopener\\'><div class=\\'card-image-placeholder\\'>${cat.emoji}</div></a>'" /></a>`
         : `<a href="${mapUrl}" target="_blank" rel="noopener"><div class="card-image-placeholder">${cat.emoji}</div></a>`;
 
       html += `<div class="card" id="card-${item.id}">
