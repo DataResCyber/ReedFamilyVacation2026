@@ -1089,6 +1089,22 @@ function handleImportOverlayClick(e) {
 
 const VALID_CATS = new Set(CATEGORIES.map(c => c.id));
 
+// Maps friendly/emoji tab labels → internal category IDs
+const CAT_ALIASES = {
+  'hikes': 'hikes', 'waterfalls': 'waterfalls',
+  'restaurants': 'restaurants',
+  'activities': 'adventures', 'adventures': 'adventures', 'swimming': 'swimming',
+  'ice cream': 'ice-cream', 'ice-cream': 'ice-cream',
+  'kids activities': 'petting-zoo', 'kids': 'petting-zoo', 'petting-zoo': 'petting-zoo', 'petting zoo': 'petting-zoo', 'farms': 'farms',
+  'other': 'main-street', 'main-street': 'main-street', 'main street': 'main-street',
+};
+
+function resolveCategory(raw) {
+  // Strip emojis and extra whitespace, lowercase
+  const cleaned = raw.replace(/[\u{1F300}-\u{1FFFF}]/gu, '').replace(/[^\w\s-]/g, '').trim().toLowerCase();
+  return CAT_ALIASES[cleaned] || (VALID_CATS.has(cleaned) ? cleaned : null);
+}
+
 function parseSheet(file, callback) {
   const reader = new FileReader();
   reader.onload = function(e) {
@@ -1100,18 +1116,23 @@ function parseSheet(file, callback) {
   reader.readAsArrayBuffer(file);
 }
 
-function rowsToEntries(rows, startId) {
-  const valid = [], errors = [];
+function rowsToEntries(rows, startId, existingNames) {
+  const valid = [], errors = [], dupes = [];
   rows.forEach((row, i) => {
     const name     = String(row.name     || '').trim();
-    const category = String(row.category || '').trim().toLowerCase();
+    const rawCat   = String(row.category || '').trim();
     const location = String(row.location || '').trim();
-    if (!name || !category || !location) {
-      errors.push(`Row ${i + 2}: missing name, category, or location`);
+    if (!name || !rawCat || !location) {
+      errors.push(`Row ${i + 2}: missing required field`);
       return;
     }
-    if (!VALID_CATS.has(category)) {
-      errors.push(`Row ${i + 2}: unknown category "${category}"`);
+    const category = resolveCategory(rawCat);
+    if (!category) {
+      errors.push(`Row ${i + 2}: unknown category "${rawCat}"`);
+      return;
+    }
+    if (existingNames && existingNames.has(name.toLowerCase())) {
+      dupes.push(name);
       return;
     }
     valid.push({
@@ -1124,19 +1145,26 @@ function rowsToEntries(rows, startId) {
       image:   String(row.image   || '').trim(),
     });
   });
-  return { valid, errors };
+  return { valid, errors, dupes };
 }
 
 function previewImport() {
   const file = document.getElementById('importFile').files[0];
   const preview = document.getElementById('importPreview');
   if (!file) { preview.textContent = ''; return; }
+  const mode = document.getElementById('importMode').value;
   parseSheet(file, rows => {
-    const { valid, errors } = rowsToEntries(rows, 1);
-    let msg = `✅ ${valid.length} valid row${valid.length !== 1 ? 's' : ''} found.`;
-    if (errors.length) msg += ` ⚠️ ${errors.length} row${errors.length !== 1 ? 's' : ''} will be skipped.`;
+    const existingNames = mode === 'merge'
+      ? new Set(entries.map(e => e.name.toLowerCase()))
+      : null;
+    const { valid, errors, dupes } = rowsToEntries(rows, 1, existingNames);
+    let msg = `✅ ${valid.length} place${valid.length !== 1 ? 's' : ''} will be imported.`;
+    if (dupes.length) msg += ` 🔁 ${dupes.length} duplicate${dupes.length !== 1 ? 's' : ''} skipped.`;
+    if (errors.length) msg += ` ⚠️ ${errors.length} invalid row${errors.length !== 1 ? 's' : ''} skipped.`;
     preview.textContent = msg;
   });
+  // Re-run preview if mode changes
+  document.getElementById('importMode').onchange = previewImport;
 }
 
 function doImport() {
@@ -1144,24 +1172,24 @@ function doImport() {
   if (!file) { showToast('⚠️ Please choose an Excel file.'); return; }
   const mode = document.getElementById('importMode').value;
   parseSheet(file, rows => {
+    const existingNames = mode === 'merge'
+      ? new Set(entries.map(e => e.name.toLowerCase()))
+      : null;
     const base = mode === 'replace' ? 1 : nextId;
-    const { valid, errors } = rowsToEntries(rows, base);
+    const { valid, errors, dupes } = rowsToEntries(rows, base, existingNames);
     if (valid.length === 0) {
-      showToast('⚠️ No valid rows found. Check your column names.');
+      showToast('⚠️ No new entries found — all may be duplicates or invalid.');
       return;
     }
-    if (mode === 'replace') {
-      entries = valid;
-    } else {
-      entries = [...entries, ...valid];
-    }
+    entries = mode === 'replace' ? valid : [...entries, ...valid];
     nextId = Math.max(...entries.map(e => e.id)) + 1;
     save();
     closeImportModal();
     activeTab = 'hikes';
     render();
-    const skipped = errors.length ? ` (${errors.length} skipped)` : '';
-    showToast(`✅ Imported ${valid.length} places${skipped}!`);
+    let msg = `✅ Imported ${valid.length} places!`;
+    if (dupes.length) msg += ` (${dupes.length} duplicates skipped)`;
+    showToast(msg);
   });
 }
 
